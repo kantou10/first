@@ -2,8 +2,8 @@
 ## 日時：yyyy/mm/dd hh:mm〜hh:mm
 ## 開催場所：
 ## 出席者：
-- TG：
-- INET：
+- GroupA：
+- GroupB：
 
 ## 議題（アジェンダ）
 1. [議題1](#link1)
