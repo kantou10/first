@@ -1,0 +1,16 @@
+@startuml
+skinparam monochrome true
+
+actor User
+
+User -> Node1 : ‚È‚É‚©‚·‚é
+Node1 -> Node1 : ‚È‚É‚©‚·‚é
+Node1 -> Node2 : ‚È‚É‚©‚ð—v‹
+Node2 -> Node3 : ‚È‚É‚©‚ð—v‹
+Node3 -> Node1 : ‚È‚É‚©‚ÌŒŸØˆË—Š
+Node1 -> Node3 : ŒŸØOK
+Node3 -> Node2 : ‚È‚É‚©‚ð•Ô‚·
+Node2 -> Node1 : ‚È‚É‚©‚ð•Ô‚·
+Node1 -> User : ‚È‚É‚©‚ªŠ®—¹
+
+@enduml
