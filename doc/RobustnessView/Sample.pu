@@ -1,0 +1,75 @@
+ @startuml 
+
+title ロバストネス図
+
+/'
+-------------------------------
+   図の方向を決められます
+-------------------------------
+'/
+left to right direction
+
+ actor ツール実行ユーザ
+ entity 給与明細txt
+ entity Viewカード明細txt
+ entity 三井住友カード明細txt
+ entity 楽天カード明細txt
+ database DB
+ 
+package "給与明細テキスト変換" {
+ 
+ boundary Gmail
+ boundary terminal
+ control pdf2txt
+ entity 給与明細pdf
+
+
+ Gmail --> 給与明細pdf 
+ ツール実行ユーザ -> Gmail: <<①給与明細取得>>
+ pdf2txt -> 給与明細txt : <<出力>>
+ pdf2txt <. 給与明細pdf : <<入力>>
+ terminal --> pdf2txt
+ ツール実行ユーザ -> terminal: <<②給与明細のテキスト化>>
+}
+
+package "WEBスクレイピング"{
+ boundary NodeWebkit
+ control ViewCard
+ control MituiSumitomoCard
+ control RakutenCard
+ control ViewCard
+ 
+ ツール実行ユーザ --> NodeWebkit:<<③WEBページからデータ取得>>
+ NodeWebkit --> ViewCard
+ ViewCard -> Viewカード明細txt: <<出力>>
+ NodeWebkit --> MituiSumitomoCard
+ MituiSumitomoCard -> 三井住友カード明細txt: <<出力>>
+ NodeWebkit --> RakutenCard
+ RakutenCard -> 楽天カード明細txt: <<出力>>
+}
+
+package "集計処理" {
+ boundary NodeWebkit as nw2
+ control 集計
+
+ ツール実行ユーザ --> nw2 : <<④取得データのDB登録>>
+ nw2 --> 集計
+ 集計 <. 給与明細txt : <<入力>>
+ 集計 <. 三井住友カード明細txt : <<入力>>
+ 集計 <. 楽天カード明細txt : <<入力>>
+ 集計 <. Viewカード明細txt : <<入力>>
+ 集計 -> DB :<<登録>>
+}
+
+package "見える化"{
+ boundary NodeWebkit as nw3
+ control 描画
+ 
+ ツール実行ユーザ --> nw3 :<<⑤データの可視化実行>>
+ nw3 --> 描画
+ 描画 <. DB : <<入力>>
+ 描画 -> ツール実行ユーザ : <<⑥表示>>
+}
+
+
+@enduml
